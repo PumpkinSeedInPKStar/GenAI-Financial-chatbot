@@ -1,2 +1,2 @@
 # GenAI-Financial-chatbot
-1. 수정
+#알아라아라아라
