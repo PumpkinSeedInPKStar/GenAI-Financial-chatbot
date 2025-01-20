@@ -1,9 +1,19 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments
 from datasets import load_dataset
+import torch
+
+# from huggingface_hub import notebook_login
+
+# notebook_login()
+
+# 허깅 페이스 사용.ver
+# model: google/gemma-2-2b-it
+
+
 
 # 모델과 토크나이저 로드
-tokenizer = AutoTokenizer.from_pretrained("Gemma2-base")
-model = AutoModelForCausalLM.from_pretrained("Gemma2-base")
+tokenizer = AutoTokenizer.from_pretrained("google/gemma-2-2b-it", use_auth_token=True)
+model = AutoModelForCausalLM.from_pretrained("google/gemma-2-2b-it", use_auth_token=True)
 
 # 데이터셋 로드 
 dataset = load_dataset(r'C:\jeonla.json')  # JSON 파일 경로 또는 데이터셋 이름
@@ -37,6 +47,7 @@ training_args = TrainingArguments(
     save_total_limit=2,
     logging_dir="./logs",
     logging_steps=50,
+    hub_model_id="kjh01/chatbot-gemma2-2b", # 업로드할 모델 이름 지정
 )
 
 # Trainer 객체 생성
@@ -52,3 +63,6 @@ trainer.train()
 
 # 모델 저장
 model.save_pretrained("./fine_tuned_gemma2")
+
+# 허브에 모델 푸시
+trainer.push_to_hub()
